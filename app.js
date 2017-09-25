@@ -4,9 +4,13 @@ var morgan = require('morgan');
 const bodyParser = require('body-parser');
 const nunjucks = require('nunjucks');
 var models = require('./models');
+const router = require('./routes/');
 
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 app.use(express.static('public'));
+app.use('/', router);
 
 // point nunjucks to the directory containing templates and turn off caching; configure returns an Environment
 // instance, which we'll want to use to add Markdown support later.
@@ -17,11 +21,11 @@ app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
 
 
-models.db.sync({force: true})
+models.db.sync()
 .then(function () {
     // make sure to replace the name below with your express app
     app.listen(3000, function () {
-        console.log('Server is listening on port 3001!');
+        console.log('Server is listening on port 3000!');
     });
 })
 .catch(console.error);
